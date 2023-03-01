@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -23,7 +24,8 @@ public class task_02 {
         getNamesStaffList(staff);
         System.out.println(staff);
 
-        System.out.println(sortByValues(getTreeMapStaff(staff)));
+        System.out.println(getTreeMapStaff(staff));
+        System.out.println(getRef(getTreeMapStaff(staff)));
         
         // Map<Integer, List<String>> mapStaff = getRef(getTreeMapStaff(staff));
     }
@@ -45,18 +47,18 @@ public class task_02 {
         return map;
     }
 
-    public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
-        Comparator<K> valueComparator =  new Comparator<K>() {
-            public int compare(K k1, K k2) {
-                int compare = map.get(k2).compareTo(map.get(k1));
-                if (compare == 0) return 1;                                          // компаратор взят с overflow
-                else return compare;
-            }
-        };
-        Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
-        sortedByValues.putAll(map);
-        return sortedByValues;
-    }
+    // public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
+    //     Comparator<K> valueComparator =  new Comparator<K>() {
+    //         public int compare(K k1, K k2) {
+    //             int compare = map.get(k2).compareTo(map.get(k1));
+    //             if (compare == 0) return 1;                                          // компаратор взят с overflow
+    //             else return compare;
+    //         }
+    //     };
+    //     Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
+    //     sortedByValues.putAll(map);
+    //     return sortedByValues;
+    // }
 
     private static void getNamesStaffList(ArrayList<String> staff) {
         String[] arrStaff = new String[] { "Иван Иванов", "Светлана Петрова",
@@ -71,18 +73,19 @@ public class task_02 {
         }
     }
 
-    // private static Map<Integer, List<String>> getRef(Map<String, Integer> map) {
-    //     Map<Integer, List<String>> mapRef = new TreeMap<>(Collections.reverseOrder());
+    private static Map<Integer, List<String>> getRef(Map<String, Integer> map) {
+        Map<Integer, List<String>> mapRef = new TreeMap<>(Comparator.reverseOrder());
 
-    //     for (Map.Entry<String, Integer> entry : map.entrySet()) {
-    //         mapRef.put(entry.getValue(), new ArrayList<String>());
-    //     }
-    //     for (Map.Entry<String, Integer> entry : map.entrySet()) {
-    //         int temp = map.get()
-    //         if (entry.getValue()) {
-                
-    //         }
-    //         mapRef.put(entry.getValue(), null)
-    //     }
-    // }
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            if (mapRef.containsKey(entry.getValue())) {
+                List<String> list = mapRef.get(entry.getValue());
+                list.add(entry.getKey());
+            } else{
+                List<String> list = new ArrayList<>();
+                list.add(entry.getKey());
+                mapRef.put(entry.getValue(), list);
+            }
+        }
+        return mapRef;
+    }
 }
